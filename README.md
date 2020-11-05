@@ -14,12 +14,6 @@ export PATH=$PATH:<path to repo>
 ```
 
 ### Commands
-- [`neotk assume --help`](docs/commands/assume.md)
-- [`neotk cloudhsm --help`](docs/commands/cloudhsm.md)
-- [`neotk deploy_token --help`](docs/commands/deploy_token.md)
-- [`neotk deploy_uservice --help`](docs/commands/deploy_uservice.md)
-- [`neotk export_users --help`](docs/commands/export_users.md)
-- [`neotk fetch_repos --help`](docs/commands/fetch_repos.md)
 - [`neotk hello_world --help`](docs/commands/hello_world.md)
 
 ### Other
