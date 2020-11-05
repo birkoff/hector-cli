@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+# pylint: disable=missing-docstring
+
+import os
+from os import environ, path
+import sys
+import click
+
+
+HECLI_PATH = environ.get(
+    "HECLI_PATH",
+    os.pathsep.join([
+        path.join(path.dirname(__file__), "lib"),
+    ])
+)
+
+
+class HectorToolkit(click.MultiCommand):
+    def list_commands(self, _):
+        commands = []
+        for folder in HECLI_PATH.split(os.pathsep):
+            commands_dir = path.join(folder, "commands")
+            if not path.exists(commands_dir):
+                continue
+
+            for filename in os.listdir(commands_dir):
+                if filename.endswith('.py') and '__init__.py' not in filename:
+                    commands.append(filename[:-3])
+        commands.sort()
+        return commands
+
+    # pylint: disable=arguments-differ
+    def get_command(self, _, name):
+        namespace = {}
+        for folder in HECLI_PATH.split(os.pathsep):
+            filename = path.join(folder, "commands", name.replace("-", "_") + '.py')
+
+            if not path.exists(filename):
+                continue
+
+            with open(filename) as command_file:
+                code = compile(command_file.read(), filename, 'exec')
+                namespace.update({
+                    "__file__": os.path.abspath(filename)
+                })
+                eval(code, namespace, namespace)  # nosec pylint: disable=eval-used
+            return namespace['handle']
+
+        click.echo("Command not found. Try hecli --help for more information.", err=True)
+        exit(1)
+
+
+CLI = HectorToolkit(help="This tool's subcommands are loaded from a commands.")
+
+
+if __name__ == '__main__':
+    # Add one level up to the Python path
+    for user_module in HECLI_PATH.split(os.pathsep):
+        sys.path.append(path.abspath(path.join(user_module, "..")))
+    CLI()
