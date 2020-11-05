@@ -11,4 +11,4 @@ export PATH=$PATH:<path to repo>
 ```
 
 ### Commands
-- [`hecli hello_world --help`](docs/commands/hello_world.md)
+- [`hecli hello_world --help`]
