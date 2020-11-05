@@ -9,6 +9,3 @@ pip3 install -r requirements.txt
 # Add the PATH to ~/.bash_profile
 export PATH=$PATH:<path to repo>
 ```
-
-### Commands
-- [`hecli hello_world --help`]
