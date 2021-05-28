@@ -1,5 +1,5 @@
-# Hector CLI (HeCLI)
-My personal CLI ToolKit
+# Operations Toolkit (opstk)
+CLI Operations ToolKit
 
 ### Installation
 ```
