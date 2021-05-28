@@ -7,18 +7,18 @@ import sys
 import click
 
 
-HECLI_PATH = environ.get(
-    "HECLI_PATH",
+OPSTK_PATH = environ.get(
+    "OPSTK_PATH",
     os.pathsep.join([
         path.join(path.dirname(__file__), "lib"),
     ])
 )
 
 
-class HectorToolkit(click.MultiCommand):
+class OperationsToolkit(click.MultiCommand):
     def list_commands(self, _):
         commands = []
-        for folder in HECLI_PATH.split(os.pathsep):
+        for folder in OPSTK_PATH.split(os.pathsep):
             commands_dir = path.join(folder, "commands")
             if not path.exists(commands_dir):
                 continue
@@ -32,7 +32,7 @@ class HectorToolkit(click.MultiCommand):
     # pylint: disable=arguments-differ
     def get_command(self, _, name):
         namespace = {}
-        for folder in HECLI_PATH.split(os.pathsep):
+        for folder in OPSTK_PATH.split(os.pathsep):
             filename = path.join(folder, "commands", name.replace("-", "_") + '.py')
 
             if not path.exists(filename):
@@ -46,15 +46,15 @@ class HectorToolkit(click.MultiCommand):
                 eval(code, namespace, namespace)  # nosec pylint: disable=eval-used
             return namespace['handle']
 
-        click.echo("Command not found. Try hecli --help for more information.", err=True)
+        click.echo("Command not found. Try opstk --help for more information.", err=True)
         exit(1)
 
 
-CLI = HectorToolkit(help="This tool's subcommands are loaded from a commands.")
+CLI = OperationsToolkit(help="This tool's subcommands are loaded from a commands.")
 
 
 if __name__ == '__main__':
     # Add one level up to the Python path
-    for user_module in HECLI_PATH.split(os.pathsep):
+    for user_module in OPSTK_PATH.split(os.pathsep):
         sys.path.append(path.abspath(path.join(user_module, "..")))
     CLI()
